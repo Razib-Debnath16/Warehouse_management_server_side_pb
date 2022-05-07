@@ -47,6 +47,21 @@ async function run() {
         res.send(result);
 
     })
+    app.put('/product/:id', async (req, res) => {
+        const id = req.params.id;
+        const user = req.body;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+                quantity: user.quantity,
+                sold: user.sold
+
+            },
+        };
+        const result = await phoneCollection.updateOne(filter, updateDoc, options);
+        res.send(result);
+    })
 
 
 }
