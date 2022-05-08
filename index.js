@@ -47,6 +47,14 @@ async function run() {
         res.send(result);
 
     })
+    app.get('/products/email', async (req, res) => {
+        const email = req.query.email;
+        const query = { email: email };
+        const cursor = phoneCollection.find(query);
+        const phones = await cursor.toArray();
+        res.send(phones);
+
+    })
     app.put('/product/:id', async (req, res) => {
         const id = req.params.id;
         const user = req.body;
@@ -55,8 +63,12 @@ async function run() {
         const updateDoc = {
             $set: {
                 quantity: user.quantity,
-                sold: user.sold
-
+                sold: user.sold,
+                name: user.name,
+                email: user.email,
+                description: user.description,
+                supplierName: user.supplierName,
+                price: user.price
             },
         };
         const result = await phoneCollection.updateOne(filter, updateDoc, options);
