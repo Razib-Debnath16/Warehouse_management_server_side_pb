@@ -44,6 +44,7 @@ async function run() {
 
     await client.connect();
     const phoneCollection = client.db("products").collection("smartphone");
+    const myCollection = client.db("products").collection("myPhones");
 
     // Auth
     app.post('/login', async (req, res) => {
@@ -54,7 +55,12 @@ async function run() {
         res.send({ accessToken });
     })
 
-
+    app.get('/myProducts', async (req, res) => {
+        const query = {};
+        const cursor = myCollection.find(query);
+        const phones = await cursor.toArray();
+        res.send(phones);
+    })
     // products api
     app.get('/products', async (req, res) => {
         const query = {};
@@ -84,15 +90,14 @@ async function run() {
     app.get('/products/email', verifyJWT, async (req, res) => {
         const decodedEmail = req.decoded.email;
         const email = req.query.email;
-        if (decodedEmail === email) {
-            const query = { email: email };
-            const cursor = phoneCollection.find(query);
-            const phones = await cursor.toArray();
-            res.send(phones);
-        }
-        else {
-            return res.status(403).send({ message: 'Forbidden' })
-        }
+
+        const query = { email: email };
+        const cursor = phoneCollection.find(query);
+        const phones = await cursor.toArray();
+        res.send(phones);
+        // else {
+        //     return res.status(403).send({ message: 'Forbidden' })
+        // }
 
 
     })
