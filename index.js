@@ -83,8 +83,8 @@ async function run() {
     })
     app.get('/products/email', verifyJWT, async (req, res) => {
         const decodedEmail = req.decoded.email;
+        const email = req.query.email;
         if (decodedEmail === email) {
-            const email = req.query.email;
             const query = { email: email };
             const cursor = phoneCollection.find(query);
             const phones = await cursor.toArray();
