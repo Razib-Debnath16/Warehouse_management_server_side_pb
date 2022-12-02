@@ -126,6 +126,9 @@ async function run() {
 
 run().catch(console.dir);
 
+app.get('/', (req, res) => {
+    res.send('hello world');
+})
 app.listen(port, () => {
     console.log('port is running on ', port);
 });
